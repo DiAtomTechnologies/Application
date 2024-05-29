@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'login_page.dart';
 
 class Profile extends StatelessWidget {
@@ -108,11 +103,9 @@ class Profile extends StatelessWidget {
                     Icon(Icons.person_outline),
                     Text(
                       user?.displayName ?? 'No Name',
-                      style: GoogleFonts.roboto(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(width: 5),
@@ -393,7 +386,6 @@ class Profile extends StatelessWidget {
 
   void _deleteAccount(BuildContext context) async {
     final User? user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
       showDialog(
         context: context,
@@ -410,6 +402,19 @@ class Profile extends StatelessWidget {
           ),
           actions: [
             TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                _deleteUserAccount(user);
+              },
+              child: Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -421,97 +426,36 @@ class Profile extends StatelessWidget {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                _showReauthenticateDialog(context, user);
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
           ],
         ),
       );
     }
   }
 
-  void _showReauthenticateDialog(BuildContext context, User user) {
-    final TextEditingController _passwordController = TextEditingController();
+  void _deleteUserAccount(User user) async {
+    try {
+      final String uid = user.uid;
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color.fromARGB(255, 242, 178, 178),
-        title: Text('Reauthenticate'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              try {
-                final String password = _passwordController.text;
+      // Delete the user document from Firestore
+      await FirebaseFirestore.instance.collection("Users").doc(uid).delete();
 
-                // Create a credential using email and password
-                AuthCredential credential = EmailAuthProvider.credential(
-                  email: user.email!,
-                  password: password,
-                );
+      // Delete the user from Firebase Authentication
+      await user.delete();
 
-                // Reauthenticate the user
-                await user.reauthenticateWithCredential(credential);
+      // Sign out the user
+      signUserOut();
 
-                // Delete the user account
-                await user.delete();
-                await FirebaseFirestore.instance
-                    .collection("Users")
-                    .doc(user.uid)
-                    .delete();
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              } catch (e) {
-                print("Error reauthenticating or deleting account: $e");
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content:
-                          Text('Failed to delete account. Please try again.')),
-                );
-              }
-              Navigator.pop(context);
-            },
-            child: Text('Reauthenticate'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel'),
-          ),
-        ],
-      ),
-    );
+      // Navigate to the login page
+      Get.offAll(() => LoginPage());
+    } catch (e) {
+      print("Error deleting account: $e");
+    }
   }
 }
 
-signUserOut() async {
+void signUserOut() async {
   try {
     await FirebaseAuth.instance.signOut();
-
     final GoogleSignIn _googleSignIn = GoogleSignIn();
     await _googleSignIn.signOut();
 
@@ -528,7 +472,7 @@ Widget buildAboutContent() {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // About page content
+// About page content
         SizedBox(height: 20.0),
         Image.asset(
           'assets/images/logo.png',
