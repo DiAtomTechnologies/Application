@@ -1,9 +1,9 @@
-import "package:diatom/pages/AddDevice.dart";
-import "package:diatom/pages/chatbot/chat.dart";
-import "package:diatom/pages/home.dart";
-import "package:flutter/material.dart";
-import "package:hidden_drawer_menu/hidden_drawer_menu.dart";
-import "package:diatom/pages/services/Analytics.dart";
+import 'package:flutter/material.dart';
+import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
+import 'package:diatom/pages/AddDevice.dart';
+import 'package:diatom/pages/chatbot/chat.dart';
+import 'package:diatom/pages/home.dart';
+import 'package:diatom/pages/services/Analytics.dart';
 
 class HiddenDrawer extends StatefulWidget {
   const HiddenDrawer({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class HiddenDrawer extends StatefulWidget {
 }
 
 class _HiddenDrawerState extends State<HiddenDrawer> {
-  List<ScreenHiddenDrawer> _pages = [];
+  late List<ScreenHiddenDrawer> _pages;
 
   @override
   void initState() {
@@ -24,14 +24,13 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           name: "Home",
           baseStyle: TextStyle(
             color: Colors.white,
-            fontSize: 18.0, // Set the font size
-            fontWeight: FontWeight.bold, // Set the font weight
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),
           selectedStyle: TextStyle(
             color: Colors.red,
             fontSize: 18.0,
-            fontWeight:
-                FontWeight.bold, // Set the font weight for selected state
+            fontWeight: FontWeight.bold,
           ),
           colorLineSelected: Colors.red,
         ),
@@ -94,10 +93,17 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
   @override
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
-      backgroundColorMenu: const Color.fromRGBO(144, 164, 174, 1),
+      backgroundColorMenu: const Color.fromARGB(255, 2, 33, 59),
       screens: _pages,
       initPositionSelected: 0,
-      leadingAppBar: Icon(Icons.menu),
+      leadingAppBar: Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: Image.asset(
+          'assets/images/logo.png',
+          height: 50.0,
+          width: 50.0,
+        ),
+      ),
       tittleAppBar: Text(
         "DiAtom Technologies",
         style: TextStyle(
@@ -108,7 +114,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
         ),
       ),
       isTitleCentered: true,
-      backgroundColorAppBar: Color.fromARGB(255, 50, 126, 188),
+      backgroundColorAppBar: const Color.fromARGB(255, 2, 33, 59),
     );
   }
 }

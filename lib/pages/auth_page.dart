@@ -13,10 +13,10 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print('User is authenticated'); // Add this line for debugging
+            print('User is authenticated');
             return nav();
           } else {
-            print('User is not authenticated'); // Add this line for debugging
+            print('User is not authenticated');
             return LoginPage();
           }
         },

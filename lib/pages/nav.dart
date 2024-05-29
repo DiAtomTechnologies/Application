@@ -51,7 +51,7 @@ class _HomeState extends State<nav> {
                     ),
                     GButton(
                       icon: Icons.folder,
-                      text: "About Us",
+                      text: "Analytics",
                       iconColor: Colors.white,
                     ),
                     GButton(

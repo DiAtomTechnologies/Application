@@ -19,8 +19,10 @@ class _ChatPageState extends State<ChatPage> {
     enableLog: true,
   );
 
-  final ChatUser _currentUser = ChatUser(id: '1', firstName: 'Hussain', lastName: 'Mustafa');
-  final ChatUser _gptChatUser = ChatUser(id: '2', firstName: 'Chat', lastName: 'GPT');
+  final ChatUser _currentUser =
+      ChatUser(id: '1', firstName: 'Hussain', lastName: 'Mustafa');
+  final ChatUser _gptChatUser =
+      ChatUser(id: '2', firstName: 'Chat', lastName: 'GPT');
 
   List<ChatMessage> _messages = <ChatMessage>[];
   List<ChatUser> _typingUsers = <ChatUser>[];
@@ -28,6 +30,36 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 2, 33, 59),
+        title: Text(
+          'ChatBot',
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Roboto',
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+          ),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/logo.png',
+              height: 40.0,
+              width: 40.0,
+            ),
+          ),
+        ],
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: DashChat(
         currentUser: _currentUser,
         typingUsers: _typingUsers,

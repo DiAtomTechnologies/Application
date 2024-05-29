@@ -55,6 +55,8 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   awesome_notifications: ^0.8.2
   fl_chart: ^0.68.0
+  google_fonts: ^4.0.4
+  image_picker: ^1.1.1
   
 dev_dependencies:
   flutter_test:
