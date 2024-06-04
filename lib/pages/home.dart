@@ -62,6 +62,15 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/logo.png', 
+              height: 30.0,
+            ),
+          ),
+        ],
       ),
 
       drawer: Drawer(
